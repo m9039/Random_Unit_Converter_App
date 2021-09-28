@@ -4,4 +4,6 @@
     <string name="btn_convert">CONVERT</string>
     <string name="tv_to">To:</string>
     <string name="enter_number">Enter number in:</string>
+    <string name="tv_successfully_converted">Successfully converted...</string>
+    <string name="tvFrom">From:</string>
 </resources>

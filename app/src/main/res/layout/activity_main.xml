@@ -8,83 +8,81 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/tv_convert_from"
+        android:id="@+id/tvConvertFrom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="112dp"
         android:text="@string/tv_convert_from"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_unit1"
-        app:layout_constraintHorizontal_bias="0.598"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/et_user_input"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_convert"
+        android:id="@+id/btnConvert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        android:text="@string/btn_convert"
         android:layout_centerInParent="true"
+        android:layout_marginBottom="152dp"
+        android:text="@string/btn_convert"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/tvUnit2"
+        app:layout_constraintStart_toStartOf="@+id/tvUnit2" />
 
     <TextView
-        android:id="@+id/tv_to"
+        android:id="@+id/tvTo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="188dp"
+        android:layout_marginTop="164dp"
         android:text="@string/tv_to"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_convert_from" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tvConvertFrom"
+        app:layout_constraintStart_toStartOf="@+id/tvConvertFrom"
+        app:layout_constraintTop_toBottomOf="@+id/tvConvertFrom" />
 
     <EditText
-        android:id="@+id/et_user_input"
+        android:id="@+id/etUserInput"
         android:layout_width="147dp"
         android:layout_height="48dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="60dp"
+        android:layout_gravity="right"
+        android:layout_marginStart="44dp"
         android:autofillHints="3"
         android:ems="10"
-        android:inputType="number"
+        android:gravity="center_horizontal"
         android:hint="@string/enter_number"
+        android:inputType="number"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_convert"
+        app:layout_constraintBottom_toBottomOf="@+id/btnConvert"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_convert_from"
-        app:layout_constraintVertical_bias="0.006" />
+        app:layout_constraintTop_toBottomOf="@+id/tvConvertFrom"
+        app:layout_constraintVertical_bias="0.07" />
 
     <TextView
-        android:id="@+id/tv_unit1"
+        android:id="@+id/tvUnit1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/et_user_input"
+        app:layout_constraintBottom_toBottomOf="@+id/etUserInput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
-        app:layout_constraintStart_toEndOf="@+id/et_user_input"
-        app:layout_constraintTop_toTopOf="@+id/et_user_input"
-        app:layout_constraintVertical_bias="0.545" />
+        app:layout_constraintHorizontal_bias="0.195"
+        app:layout_constraintStart_toEndOf="@+id/etUserInput"
+        app:layout_constraintTop_toTopOf="@+id/etUserInput" />
 
     <TextView
-        android:id="@+id/tv_unit2"
+        android:id="@+id/tvUnit2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_convert"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_to"
-        app:layout_constraintVertical_bias="0.355" />
+        app:layout_constraintBottom_toTopOf="@+id/btnConvert"
+        app:layout_constraintEnd_toEndOf="@+id/tvTo"
+        app:layout_constraintStart_toStartOf="@+id/tvTo"
+        app:layout_constraintTop_toBottomOf="@+id/tvTo"
+        app:layout_constraintVertical_bias="0.209" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
