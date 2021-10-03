@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
@@ -16,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static String[] unitsGenerated;
+    String[] units = {"kilometres", "metres", "centimetres", "millimetres", "miles", "yards", "feet", "inches"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,18 +27,18 @@ public class MainActivity extends AppCompatActivity {
 
         Button btn = findViewById(R.id.btnConvert);
         View view = new View(this);
-        generateUnits(view);
+        generateUnits();
 
         btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                convertInput(view);
+                convertInput(units);
             }
         });
     }
 
-    public static String[] generateUnits(View view){
-        String[] units = {"kilometres", "metres", "centimetres", "millimetres", "miles", "yards", "feet", "inches"};
+    public void generateUnits(){
+
 
         Random random = new Random();
         Vector<String> alreadyUsed = new Vector<String>();
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         textViews[1] = R.id.tvUnit2;
 
         for(int v : textViews){                                             //for each textview listed in line 26-27
-            TextView tv = (TextView)view.findViewById(v);                   //declaring textview
+            TextView tv = (TextView)findViewById(v);                   //declaring textview
             String nextString;
             do {
                 nextString = units[random.nextInt(units.length)];           //generates a random unit from the array above
@@ -54,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
             tv.setText(nextString);                                         //displays text in textview
         }
 
-        TextView unit1 = (TextView) view.findViewById(R.id.tvUnit1);                   //checking the value of tvUnit1
+        TextView unit1 = (TextView) findViewById(R.id.tvUnit1);                   //checking the value of tvUnit1
         String firstUnit = unit1.getText().toString();
         Log.d(TAG, "unit1 is " + firstUnit);
 
-        TextView unit2 = view.findViewById(R.id.tvUnit2);                   //checking the value of tvUnit2
+        TextView unit2 = findViewById(R.id.tvUnit2);                   //checking the value of tvUnit2
         String secondUnit = unit2.getText().toString();
         Log.d(TAG, "unit2 is " + secondUnit);
 
@@ -72,26 +75,46 @@ public class MainActivity extends AppCompatActivity {
         unitsGenerated = new String[2];
         unitsGenerated[0] = firstUnit;
         unitsGenerated[1] = secondUnit;
-        return unitsGenerated;
+//        return unitsGenerated;
+        convertInput(units);
+
+        Intent intentUnit1 = new Intent(MainActivity.this, SecondActivity.class);
+        String sendUnit1 = firstUnit;
+        intentUnit1.putExtra("sendFirst", sendUnit1);
+        startActivity(intentUnit1);
+
+        Intent intentUnit2 = new Intent(MainActivity.this, SecondActivity.class);
+        String sendUnit2 = secondUnit;
+        intentUnit2.putExtra("sendSecond", sendUnit2);
+        startActivity(intentUnit2);
     }
 
-    public static void convertInput(View view){
-        String[] unitsGenerated = generateUnits(view);
+    public void convertInput(String[] unitsGenerated){
+//        String[] unitsGenerated = generateUnits(view);
         String x = unitsGenerated[0];                                   //add breakpoint for debugging
 //        String y = unitsGenerated[1];                                   //add breakpoint for debugging
 
 
-        EditText userInput = view.findViewById(R.id.etUserInput);
+        EditText userInput = findViewById(R.id.etUserInput);
         String numberInput = userInput.getText().toString();
+
+        Intent intentUserInput = new Intent(MainActivity.this, SecondActivity.class);
+        String sendInput = numberInput;
+        intentUserInput.putExtra("sendInput", sendInput);
+        startActivity(intentUserInput);
 
         //converting string to double
         double valueEntered = Double.parseDouble(numberInput);
-        TextView converted = view.findViewById(R.id.tvConverted);
+        TextView converted = findViewById(R.id.tvConverted);
 
         //converting entered number to desired unit
-        if (unitsGenerated[0] == "kilometres" || unitsGenerated[0] == "metres") {
+        if (unitsGenerated[0] == "kilometres" || unitsGenerated[1] == "metres") {
             double convertedValue = valueEntered * 1000;
             converted.setText(String.valueOf((double) convertedValue));
+                Intent intentConverted = new Intent(MainActivity.this, SecondActivity.class);
+                Double numberConverted = convertedValue;
+                intentConverted.putExtra("sendConverted", numberConverted);
+                startActivity(intentConverted);
             } else if (unitsGenerated[0] == "kilometres" || unitsGenerated[1] == "centimetres") {
                 double convertedValue = valueEntered * 100000;
                 converted.setText(String.valueOf((double) convertedValue));
@@ -269,10 +292,12 @@ public class MainActivity extends AppCompatActivity {
             converted.setText("Unable to convert :(");
         }
 
-        Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-        String transferConverted = convertedValue;
-        intent.putStringArrayListExtra("converted", transferConverted);
-        startActivity(intent);
+//        Intent intentConverted = new Intent(MainActivity.this, SecondActivity.class);
+//        Double numberConverted = convertedValue;
+//        intentConverted.putExtra("sendConverted", numberConverted);
+//        startActivity(intentConverted);
+
+
 
     }
 }
