@@ -1,304 +1,268 @@
 package au.edu.unsw.infs3634.unitconverter;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Random;
-import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private static String[] unitsGenerated;
     String[] units = {"kilometres", "metres", "centimetres", "millimetres", "miles", "yards", "feet", "inches"};
+    String generatedUnit1;
+    String generatedUnit2 = "";
+    double convertedValue = 1;
+    double valueEntered = 0;
+    double convertedValue3dp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn = findViewById(R.id.btnConvert);
-        View view = new View(this);
         generateUnits();
 
+        Button btn = findViewById(R.id.btnConvert);
         btn.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view) {
-                convertInput(units);
+            public void onClick(View v) {
+                convertClicked();
             }
         });
     }
 
     public void generateUnits(){
-
-
         Random random = new Random();
-        Vector<String> alreadyUsed = new Vector<String>();
 
-        int[] textViews = new int[2];                                       //giving number values to each textview
-        textViews[0] = R.id.tvUnit1;
-        textViews[1] = R.id.tvUnit2;
+        TextView tvUnit1 = findViewById(R.id.tvUnit1);
+        TextView tvUnit2 = findViewById(R.id.tvUnit2);
 
-        for(int v : textViews){                                             //for each textview listed in line 26-27
-            TextView tv = (TextView)findViewById(v);                   //declaring textview
-            String nextString;
-            do {
-                nextString = units[random.nextInt(units.length)];           //generates a random unit from the array above
-            } while (alreadyUsed.contains(nextString));                     //this loops generates another unit if it has already been used
-            alreadyUsed.add(nextString);                                    //it adds the used unit to a list so that it wont pick it again
-            tv.setText(nextString);                                         //displays text in textview
+        int unitOne = random.nextInt(units.length);
+        generatedUnit1 = units[unitOne];
+        tvUnit1.setText(generatedUnit1);
+
+        boolean generateAgain = true;
+        while (generateAgain) {
+            int unitTwo = random.nextInt(units.length);
+            if (unitTwo != unitOne){
+                generatedUnit2 = units[unitTwo];
+                generateAgain = false;
+            }
         }
-
-        TextView unit1 = (TextView) findViewById(R.id.tvUnit1);                   //checking the value of tvUnit1
-        String firstUnit = unit1.getText().toString();
-        Log.d(TAG, "unit1 is " + firstUnit);
-
-        TextView unit2 = findViewById(R.id.tvUnit2);                   //checking the value of tvUnit2
-        String secondUnit = unit2.getText().toString();
-        Log.d(TAG, "unit2 is " + secondUnit);
-
-//        Intent intent = new Intent();                                   //use this to transfer data to second activity
-//            String fUnit = secondUnit;
-//            intent.putExtra("fUnit", fUnit);
-//
-//            String sUnit = secondUnit;
-//            intent.putExtra("sUnit", sUnit);
-//        startActivity(intent);
-        unitsGenerated = new String[2];
-        unitsGenerated[0] = firstUnit;
-        unitsGenerated[1] = secondUnit;
-//        return unitsGenerated;
-        convertInput(units);
-
-        Intent intentUnit1 = new Intent(MainActivity.this, SecondActivity.class);
-        String sendUnit1 = firstUnit;
-        intentUnit1.putExtra("sendFirst", sendUnit1);
-        startActivity(intentUnit1);
-
-        Intent intentUnit2 = new Intent(MainActivity.this, SecondActivity.class);
-        String sendUnit2 = secondUnit;
-        intentUnit2.putExtra("sendSecond", sendUnit2);
-        startActivity(intentUnit2);
+        tvUnit2.setText(generatedUnit2);
     }
 
-    public void convertInput(String[] unitsGenerated){
-//        String[] unitsGenerated = generateUnits(view);
-        String x = unitsGenerated[0];                                   //add breakpoint for debugging
-//        String y = unitsGenerated[1];                                   //add breakpoint for debugging
+    public void goToSecondActivity(){
+        convertedValue3dp = new BigDecimal(convertedValue).setScale(3, RoundingMode.HALF_UP).doubleValue();
+        String strConvertedValue = String.valueOf(convertedValue3dp);
+        String strValueEntered = String.valueOf(valueEntered);
 
+        Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+        intent.putExtra("sendFirst", generatedUnit1);
+        intent.putExtra("sendSecond", generatedUnit2);
+        intent.putExtra("sendInput", strValueEntered);
+        intent.putExtra("sendConverted", strConvertedValue);
+        startActivity(intent);
+    }
 
+    public void convertClicked(){
         EditText userInput = findViewById(R.id.etUserInput);
-        String numberInput = userInput.getText().toString();
+        String numberInput = userInput.getText().toString().trim();
 
-        Intent intentUserInput = new Intent(MainActivity.this, SecondActivity.class);
-        String sendInput = numberInput;
-        intentUserInput.putExtra("sendInput", sendInput);
-        startActivity(intentUserInput);
-
-        //converting string to double
-        double valueEntered = Double.parseDouble(numberInput);
-        TextView converted = findViewById(R.id.tvConverted);
-
-        //converting entered number to desired unit
-        if (unitsGenerated[0] == "kilometres" || unitsGenerated[1] == "metres") {
-            double convertedValue = valueEntered * 1000;
-            converted.setText(String.valueOf((double) convertedValue));
-                Intent intentConverted = new Intent(MainActivity.this, SecondActivity.class);
-                Double numberConverted = convertedValue;
-                intentConverted.putExtra("sendConverted", numberConverted);
-                startActivity(intentConverted);
-            } else if (unitsGenerated[0] == "kilometres" || unitsGenerated[1] == "centimetres") {
-                double convertedValue = valueEntered * 100000;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "kilometres" || unitsGenerated[1] == "millimetres") {
-                double convertedValue = valueEntered * 1000000;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "kilometres" || unitsGenerated[1] == "miles") {
-                double convertedValue = valueEntered / 1.609;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "kilometres" || unitsGenerated[1] == "yards") {
-                double convertedValue = valueEntered * 1094;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "kilometres" || unitsGenerated[1] == "feet") {
-                double convertedValue = valueEntered * 3281;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "kilometres" || unitsGenerated[1] == "inches") {
-                double convertedValue = valueEntered * 39370;
-                converted.setText(String.valueOf((double) convertedValue));
-
-            } else if (unitsGenerated[0] == "metres" || unitsGenerated[1] == "kilometres") {
-                double convertedValue = valueEntered / 1000;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "metres" || unitsGenerated[1] == "centimetres") {
-                double convertedValue = valueEntered * 100;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "metres" || unitsGenerated[1] == "millimetres") {
-                double convertedValue = valueEntered * 1000;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "metres" || unitsGenerated[1] == "miles") {
-                double convertedValue = valueEntered / 1609;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "metres" || unitsGenerated[1] == "yards") {
-                double convertedValue = valueEntered * 1.094;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "metres" || unitsGenerated[1] == "feet") {
-                double convertedValue = valueEntered * 3.281;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "metres" || unitsGenerated[1] == "inches") {
-                double convertedValue = valueEntered * 39.37;
-                converted.setText(String.valueOf((double) convertedValue));
-
-            } else if (unitsGenerated[0] == "centimetres" || unitsGenerated[1] == "kilometres") {
-                double convertedValue = valueEntered / 100000;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "centimetres" || unitsGenerated[1] == "metres") {
-                double convertedValue = valueEntered / 100;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "centimetres" || unitsGenerated[1] == "millimetres") {
-                double convertedValue = valueEntered * 10;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "centimetres" || unitsGenerated[1] == "miles") {
-                double convertedValue = valueEntered / 160934;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "centimetres" || unitsGenerated[1] == "yards") {
-                double convertedValue = valueEntered / 91.44;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "centimetres" || unitsGenerated[1] == "feet") {
-                double convertedValue = valueEntered / 30.48;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "centimetres" || unitsGenerated[1] == "inches") {
-                double convertedValue = valueEntered / 2.54;
-                converted.setText(String.valueOf((double) convertedValue));
-
-            } else if (unitsGenerated[0] == "millimetres" || unitsGenerated[1] == "kilometres") {
-                double convertedValue = valueEntered / 1000000;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "millimetres" || unitsGenerated[1] == "metres") {
-                double convertedValue = valueEntered / 1000;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "millimetres" || unitsGenerated[1] == "centimetres") {
-                double convertedValue = valueEntered / 10;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "millimetres" || unitsGenerated[1] == "miles") {
-                double convertedValue = valueEntered / 1.609e+6;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "millimetres" || unitsGenerated[1] == "yards") {
-                double convertedValue = valueEntered / 914;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "millimetres" || unitsGenerated[1] == "feet") {
-                double convertedValue = valueEntered / 305;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "millimetres" || unitsGenerated[1] == "inches") {
-                double convertedValue = valueEntered / 25.4;
-                converted.setText(String.valueOf((double) convertedValue));
-
-            } else if (unitsGenerated[0] == "miles" || unitsGenerated[1] == "kilometres") {
-                double convertedValue = valueEntered * 1.609;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "miles" || unitsGenerated[1] == "metres") {
-                double convertedValue = valueEntered * 1609;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "miles" || unitsGenerated[1] == "centimetres") {
-                double convertedValue = valueEntered * 160934;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "miles" || unitsGenerated[1] == "millimetres") {
-                double convertedValue = valueEntered * 1.609e+6;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "miles" || unitsGenerated[1] == "yards") {
-                double convertedValue = valueEntered * 1760;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "miles" || unitsGenerated[1] == "feet") {
-                double convertedValue = valueEntered * 5280;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "miles" || unitsGenerated[1] == "inches") {
-                double convertedValue = valueEntered * 63360;
-                converted.setText(String.valueOf((double) convertedValue));
-
-            } else if (unitsGenerated[0] == "yards" || unitsGenerated[1] == "kilometres") {
-                double convertedValue = valueEntered / 1094;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "yards" || unitsGenerated[1] == "metres") {
-                double convertedValue = valueEntered / 1.094;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "yards" || unitsGenerated[1] == "centimetres") {
-                double convertedValue = valueEntered * 91.44;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "yards" || unitsGenerated[1] == "millimetres") {
-                double convertedValue = valueEntered * 914;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "yards" || unitsGenerated[1] == "miles") {
-                double convertedValue = valueEntered / 1760;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "yards" || unitsGenerated[1] == "feet") {
-                double convertedValue = valueEntered * 3;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "yards" || unitsGenerated[1] == "inches") {
-                double convertedValue = valueEntered * 36;
-                converted.setText(String.valueOf((double) convertedValue));
-
-            } else if (unitsGenerated[0] == "feet" || unitsGenerated[1] == "kilometres") {
-                double convertedValue = valueEntered / 3281;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "feet" || unitsGenerated[1] == "metres") {
-                double convertedValue = valueEntered / 3.281;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "feet" || unitsGenerated[1] == "centimetres") {
-                double convertedValue = valueEntered * 30.48;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "feet" || unitsGenerated[1] == "millimetres") {
-                double convertedValue = valueEntered * 305;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "feet" || unitsGenerated[1] == "miles") {
-                double convertedValue = valueEntered / 5280;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "feet" || unitsGenerated[1] == "yards") {
-                double convertedValue = valueEntered / 3;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "feet" || unitsGenerated[1] == "inches") {
-                double convertedValue = valueEntered * 12;
-                converted.setText(String.valueOf((double) convertedValue));
-
-            } else if (unitsGenerated[0] == "inches" || unitsGenerated[1] == "kilometres") {
-                double convertedValue = valueEntered / 39370;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "inches" || unitsGenerated[1] == "metres") {
-                double convertedValue = valueEntered / 39.37;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "inches" || unitsGenerated[1] == "centimetres") {
-                double convertedValue = valueEntered * 2.54;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "inches" || unitsGenerated[1] == "millimetres") {
-                double convertedValue = valueEntered * 25.4;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "inches" || unitsGenerated[1] == "miles") {
-                double convertedValue = valueEntered / 63360;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "inches" || unitsGenerated[1] == "yards") {
-                double convertedValue = valueEntered / 36;
-                converted.setText(String.valueOf((double) convertedValue));
-            } else if (unitsGenerated[0] == "inches" || unitsGenerated[1] == "feet") {
-                double convertedValue = valueEntered / 12;
-                converted.setText(String.valueOf((double) convertedValue));
-
-            }else {
-            converted.setText("Unable to convert :(");
+        //detect an empty string and set it to "0" instead to prevent error message
+        if (numberInput.equals("")){
+            numberInput = "0";
         }
 
-//        Intent intentConverted = new Intent(MainActivity.this, SecondActivity.class);
-//        Double numberConverted = convertedValue;
-//        intentConverted.putExtra("sendConverted", numberConverted);
-//        startActivity(intentConverted);
+        //converting string to double
+        valueEntered = Double.parseDouble(numberInput);
 
+        //converting original input to new generated unit by checking if the unit generated matches the parameters
+        //compute desired value using the corresponding formula
+        //once input is converted, the second activity is called
+        if (generatedUnit1.equals("kilometres") && generatedUnit2.equals("metres")) {
+            convertedValue = valueEntered * 1000;
+            goToSecondActivity();
+            } else if (generatedUnit1.equals("kilometres") && generatedUnit2.equals("centimetres")) {
+                convertedValue = valueEntered * 100000;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("kilometres") && generatedUnit2.equals("millimetres")) {
+                convertedValue = valueEntered * 1000000;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("kilometres") && generatedUnit2.equals("miles")) {
+                convertedValue = valueEntered / 1.609;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("kilometres") && generatedUnit2.equals("yards")) {
+                convertedValue = valueEntered * 1094;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("kilometres") && generatedUnit2.equals("feet")) {
+                convertedValue = valueEntered * 3281;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("kilometres") && generatedUnit2.equals("inches")) {
+                convertedValue = valueEntered * 39370;
+                goToSecondActivity();
+//
+            } else if (generatedUnit1.equals("metres") && generatedUnit2.equals("kilometres")) {
+                convertedValue = valueEntered / 1000;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("metres") && generatedUnit2.equals("centimetres")) {
+                convertedValue = valueEntered * 100;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("metres") && generatedUnit2.equals("millimetres")) {
+                convertedValue = valueEntered * 1000;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("metres") && generatedUnit2.equals("miles")) {
+                convertedValue = valueEntered / 1609;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("metres") && generatedUnit2.equals("yards")) {
+                convertedValue = valueEntered * 1.094;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("metres") && generatedUnit2.equals("feet")) {
+                convertedValue = valueEntered * 3.281;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("metres") && generatedUnit2.equals("inches")) {
+                convertedValue = valueEntered * 39.37;
+                goToSecondActivity();
 
+            } else if (generatedUnit1.equals("centimetres") && generatedUnit2.equals("kilometres")) {
+                convertedValue = valueEntered / 100000;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("centimetres") && generatedUnit2.equals("metres")) {
+                convertedValue = valueEntered / 100;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("centimetres") && generatedUnit2.equals("millimetres")) {
+                convertedValue = valueEntered * 10;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("centimetres") && generatedUnit2.equals("miles")) {
+                convertedValue = valueEntered / 160934;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("centimetres") && generatedUnit2.equals("yards")) {
+                convertedValue = valueEntered / 91.44;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("centimetres") && generatedUnit2.equals("feet")) {
+                convertedValue = valueEntered / 30.48;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("centimetres") && generatedUnit2.equals("inches")) {
+                convertedValue = valueEntered / 2.54;
+                goToSecondActivity();
 
+            } else if (generatedUnit1.equals("millimetres") && generatedUnit2.equals("kilometres")) {
+                convertedValue = valueEntered / 1000000;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("millimetres") && generatedUnit2.equals("metres")) {
+                convertedValue = valueEntered / 1000;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("millimetres") && generatedUnit2.equals("centimetres")) {
+                convertedValue = valueEntered / 10;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("millimetres") && generatedUnit2.equals("miles")) {
+                convertedValue = valueEntered / 1609000;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("millimetres") && generatedUnit2.equals("yards")) {
+                convertedValue = valueEntered / 914;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("millimetres") && generatedUnit2.equals("feet")) {
+                convertedValue = valueEntered / 305;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("millimetres") && generatedUnit2.equals("inches")) {
+                convertedValue = valueEntered / 25.4;
+                goToSecondActivity();
+
+            } else if (generatedUnit1.equals("miles") && generatedUnit2.equals("kilometres")) {
+                convertedValue = valueEntered * 1.609;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("miles") && generatedUnit2.equals("metres")) {
+                convertedValue = valueEntered * 1609;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("miles") && generatedUnit2.equals("centimetres")) {
+                convertedValue = valueEntered * 160934;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("miles") && generatedUnit2.equals("millimetres")) {
+                convertedValue = valueEntered * 1609000;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("miles") && generatedUnit2.equals("yards")) {
+                convertedValue = valueEntered * 1760;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("miles") && generatedUnit2.equals("feet")) {
+                convertedValue = valueEntered * 5280;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("miles") && generatedUnit2.equals("inches")) {
+                convertedValue = valueEntered * 63360;
+                goToSecondActivity();
+
+            } else if (generatedUnit1.equals("yards") && generatedUnit2.equals("kilometres")) {
+                convertedValue = valueEntered / 1094;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("yards") && generatedUnit2.equals("metres")) {
+                convertedValue = valueEntered / 1.094;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("yards") && generatedUnit2.equals("centimetres")) {
+                convertedValue = valueEntered * 91.44;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("yards") && generatedUnit2.equals("millimetres")) {
+                convertedValue = valueEntered * 914;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("yards") && generatedUnit2.equals("miles")) {
+                convertedValue = valueEntered / 1760;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("yards") && generatedUnit2.equals("feet")) {
+                convertedValue = valueEntered * 3;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("yards") && generatedUnit2.equals("inches")) {
+                convertedValue = valueEntered * 36;
+                goToSecondActivity();
+
+            } else if (generatedUnit1.equals("feet") && generatedUnit2.equals("kilometres")) {
+                convertedValue = valueEntered / 3281;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("feet") && generatedUnit2.equals("metres")) {
+                convertedValue = valueEntered / 3.281;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("feet") && generatedUnit2.equals("centimetres")) {
+                convertedValue = valueEntered * 30.48;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("feet") && generatedUnit2.equals("millimetres")) {
+                convertedValue = valueEntered * 305;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("feet") && generatedUnit2.equals("miles")) {
+                convertedValue = valueEntered / 5280;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("feet") && generatedUnit2.equals("yards")) {
+                convertedValue = valueEntered / 3;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("feet") && generatedUnit2.equals("inches")) {
+                convertedValue = valueEntered * 12;
+                goToSecondActivity();
+
+            } else if (generatedUnit1.equals("inches") && generatedUnit2.equals("kilometres")) {
+                convertedValue = valueEntered / 39370;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("inches") && generatedUnit2.equals("metres")) {
+                convertedValue = valueEntered / 39.37;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("inches") && generatedUnit2.equals("centimetres")) {
+                convertedValue = valueEntered * 2.54;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("inches") && generatedUnit2.equals("millimetres")) {
+                convertedValue = valueEntered * 25.4;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("inches") && generatedUnit2.equals("miles")) {
+                convertedValue = valueEntered / 63360;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("inches") && generatedUnit2.equals("yards")){
+                convertedValue = valueEntered / 36;
+                goToSecondActivity();
+            } else if (generatedUnit1.equals("inches") && generatedUnit2.equals("feet")) {
+                convertedValue = valueEntered / 12;
+                goToSecondActivity();
+        }
     }
 }
 

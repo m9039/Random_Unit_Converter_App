@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Unit Converter</string>
-    <string name="tv_convert_from">Convert from:</string>
+    <string name="tv_convert_from">From unit: </string>
     <string name="btn_convert">CONVERT</string>
-    <string name="tv_to">To:</string>
-    <string name="enter_number">Enter number in:</string>
+    <string name="tv_to">To unit:</string>
+    <string name="enter_number">Enter number you wish to convert:</string>
     <string name="tv_successfully_converted">Successfully converted...</string>
     <string name="tvFrom">From:</string>
+    <string name="btn_Restart">Restart</string>
 </resources>
