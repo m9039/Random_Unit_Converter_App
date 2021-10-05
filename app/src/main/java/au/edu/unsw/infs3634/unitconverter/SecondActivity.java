@@ -14,11 +14,14 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
+        //Create variables for TextViews from the .xml file so that we can later set values to them
         TextView autoFirstUnit = findViewById(R.id.tvUnit1);
         TextView autoSecondUnit = findViewById(R.id.tvUnit2);
         TextView numberInputted = findViewById(R.id.tvUserInput);
         TextView numberConverted = findViewById(R.id.tvConvertedInput);
 
+        //Calls the intent that we created in MainActivity class
+        //Gathers variables from MainActivity class and displays in corresponding TextViews
         Intent intent = getIntent();
         String firstUnit = intent.getStringExtra("sendFirst");
         autoFirstUnit.setText(firstUnit);
@@ -32,15 +35,18 @@ public class SecondActivity extends AppCompatActivity {
         String convertedValue = intent.getStringExtra("sendConverted");
         numberConverted.setText(convertedValue);
 
+
         Button restartButton = findViewById(R.id.btnRestart);
         restartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //When button is clicked, goToMainActivity method is called upon
                 goToMainActivity();
             }
         });
     }
 
+    //When goToMainActivity is called, an intent is created to change ot the MainActivity screen
     private void goToMainActivity() {
         Intent intent = new Intent(SecondActivity.this, MainActivity.class);
         startActivity(intent);
