@@ -6,98 +6,129 @@
     android:layout_height="match_parent"
     tools:context=".SecondActivity">
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="92dp"
+        android:layout_height="96dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="36dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ruler_icon" />
+
     <TextView
-        android:id="@+id/tvConvertedInput"
+        android:id="@+id/tvConvertMeasurement2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginBottom="300dp"
-        android:text="TextView"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tvUserInput" />
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/amaranth"
+        android:text="@string/converter_measurement"
+        android:textColor="#632E98"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.507" />
 
     <TextView
         android:id="@+id/tvSuccessfullyConverted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="188dp"
+        android:fontFamily="@font/amaranth"
         android:text="@string/tv_successfully_converted"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.057"
+        app:layout_constraintStart_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvTo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:fontFamily="@font/amaranth"
         android:text="@string/tv_to"
         android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/tvUserInput"
+        app:layout_constraintTop_toBottomOf="@+id/tvUnit1" />
+
+    <TextView
+        android:id="@+id/tvConvertedInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/amaranth"
+        android:text="TextView"
+        android:textSize="19sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvTo"
+        app:layout_constraintTop_toBottomOf="@+id/tvTo"
+        app:layout_constraintVertical_bias="0.085" />
+
+    <TextView
+        android:id="@+id/tvUnit2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/amaranth"
+        android:text="TextView"
+        android:textSize="19sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tvUnit2"
-        app:layout_constraintEnd_toEndOf="@+id/tvSuccessfullyConverted"
-        app:layout_constraintStart_toStartOf="@+id/tvSuccessfullyConverted"
-        app:layout_constraintTop_toBottomOf="@+id/tvUnit1"
-        app:layout_constraintVertical_bias="0.718" />
+        app:layout_constraintStart_toStartOf="@+id/tvUnit1"
+        app:layout_constraintTop_toTopOf="@+id/tvConvertedInput" />
 
     <TextView
         android:id="@+id/tvUnit1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="114dp"
+        android:fontFamily="@font/amaranth"
         android:text="TextView"
-        android:textSize="18sp"
+        android:textSize="19sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/tvUserInput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.813"
+        app:layout_constraintHorizontal_bias="0.625"
         app:layout_constraintStart_toEndOf="@+id/tvUserInput"
         app:layout_constraintTop_toTopOf="@+id/tvUserInput"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/tvUnit2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/tvUnit1"
-        app:layout_constraintTop_toTopOf="@+id/tvConvertedInput" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tvFrom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/amaranth"
         android:text="@string/tvFrom"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        android:textSize="19sp"
         app:layout_constraintBottom_toTopOf="@+id/tvUnit1"
         app:layout_constraintEnd_toEndOf="@+id/tvSuccessfullyConverted"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvSuccessfullyConverted"
-        app:layout_constraintTop_toBottomOf="@+id/tvSuccessfullyConverted" />
+        app:layout_constraintTop_toBottomOf="@+id/tvSuccessfullyConverted"
+        app:layout_constraintVertical_bias="0.666" />
 
     <TextView
         android:id="@+id/tvUserInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="114dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="96dp"
+        android:fontFamily="@font/amaranth"
         android:text="TextView"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="19sp"
+        app:layout_constraintStart_toStartOf="@+id/tvFrom"
         app:layout_constraintTop_toBottomOf="@+id/tvSuccessfullyConverted" />
 
     <Button
         android:id="@+id/btnRestart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="172dp"
+        android:layout_marginBottom="124dp"
+        android:fontFamily="@font/amaranth"
         android:text="@string/btn_Restart"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tvTo"
-        app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintStart_toStartOf="@+id/tvTo" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
