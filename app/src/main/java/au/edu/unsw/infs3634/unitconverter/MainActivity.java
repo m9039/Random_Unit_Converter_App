@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (generatedUnit1.equals("kilometres") && generatedUnit2.equals("inches")) {
                 convertedValue = valueEntered * 39370;
                 goToSecondActivity();
-//
+
             } else if (generatedUnit1.equals("metres") && generatedUnit2.equals("kilometres")) {
                 convertedValue = valueEntered / 1000;
                 goToSecondActivity();
